@@ -16,6 +16,7 @@
         "expries",
         "fileupload",
         "googleusercontent",
-        "kdfry"
+        "kdfry",
+        "socketio"
     ]
 }

@@ -24,8 +24,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 var server = require("http").createServer(app);
+let myObject = { "app": app, "server": server }
 
-require('./socket.io')(server);
+require('./socket.io')(myObject);
 require('./_routes/superAdmin.route')(app);
 require('./_routes/admin.route')(app);
 require('./_routes/stream.route')(app);
