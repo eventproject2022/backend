@@ -31,6 +31,7 @@ require('./_routes/superAdmin.route')(app);
 require('./_routes/admin.route')(app);
 require('./_routes/stream.route')(app);
 require('./_routes/company.route')(app);
+require('./_routes/user.route')(app);
 app.get("/", (req, res) => {
     res.status(200).json(`Backend version 1.0.0 working `);
 });

@@ -1,4 +1,4 @@
-const stream = require('../_controllers/stream.controller');
+const user = require('../_controllers/user.controller');
 
 module.exports = (app) => {
     app.use((req, res, next) => {
@@ -10,7 +10,7 @@ module.exports = (app) => {
         res.header('Content-Type', 'application/json; charset=utf-8');
         next();
     });
-    app.post('/api/stream/createStream', stream.createStream);
-    app.post('/api/stream/zegoStreamCreated', stream.zegoStreamCreated);
-    app.post('/api/stream/zegoStreamClosed', stream.zegoStreamClosed);
+    app.post('/api/user/userSignUp', user.userSignUp);
+    app.post('/api/user/userLogin', user.userLogin);
+    app.get('/api/user/getAllUsers', user.getAllUsers);
 }

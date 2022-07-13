@@ -142,7 +142,8 @@ exports.updateCompany = (req, res) => {
                 if (files.companyImage === undefined) {
                     delete body.companyImage;
                     company.updateOne({ _id: ObjectID(req.params.companyId) }, { $set: body }).then((updateAdmin) => {
-                        if (updateAdmin.nModified == 0) {
+                        console.log(updateAdmin)
+                        if (updateAdmin.modifiedCount == 0) {
                             res.status(500).json({ err: true, msg: "An error occurred, Please try again later." });
                         } else {
                             company.findOne({ _id: ObjectID(req.params.companyId) }).then((found) => {
@@ -172,7 +173,8 @@ exports.updateCompany = (req, res) => {
                             companyImage: uploaded,
                         }
                         company.updateOne({ _id: ObjectID(req.params.companyId) }, { $set: body }).then((updateCompany) => {
-                            if (updateCompany.nModified == 0) {
+                            console.log(updateCompany)
+                            if (updateCompany.modifiedCount == 0) {
                                 res.status(500).json({ err: true, msg: "An error occurred, Please try again later." });
                             } else {
                                 company.findOne({ _id: ObjectID(req.params.companyId) }).then((found) => {

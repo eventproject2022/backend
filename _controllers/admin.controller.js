@@ -127,7 +127,7 @@ exports.updateAdmin = (req, res) => {
                 if (files.profilePhoto === undefined) {
                     delete body.profilePhoto;
                     admin.updateOne({ _id: ObjectID(req.params.adminId) }, { $set: body }).then((updateAdmin) => {
-                        if (updateAdmin.nModified == 0) {
+                        if (updateAdmin.modifiedCount == 0) {
                             res.status(500).json({ err: true, msg: "An error occurred, Please try again later." });
                         } else {
                             admin.findOne({ _id: ObjectID(req.params.adminId) }).then((found) => {
@@ -157,7 +157,7 @@ exports.updateAdmin = (req, res) => {
                             profilePhoto: uploaded,
                         }
                         admin.updateOne({ _id: ObjectID(req.params.adminId) }, { $set: body }).then((updateAdmin) => {
-                            if (updateAdmin.nModified == 0) {
+                            if (updateAdmin.modifiedCount == 0) {
                                 res.status(500).json({ err: true, msg: "An error occurred, Please try again later." });
                             } else {
                                 admin.findOne({ _id: ObjectID(req.params.adminId) }).then((found) => {

@@ -17,6 +17,7 @@
         "fileupload",
         "googleusercontent",
         "kdfry",
-        "socketio"
+        "socketio",
+        "zego"
     ]
 }

@@ -6,6 +6,9 @@ const stream = new schema({
     isActive: { type: Boolean, default: false },
     streamType: { type: String, enum: ["audio", "video"] },
     viewers: Array,
+    startAt: { type: Date },
+    endAt: { type: Date },
+    isActive: { type: Boolean, default: false },
 }, {
     versionKey: false,
     timestamps: true
