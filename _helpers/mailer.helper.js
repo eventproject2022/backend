@@ -59,6 +59,20 @@ exports.sendMail = (receiver, type, password, email) => {
             }).catch((err) => {
                 reject(err);
             });
+        } else if (type === 'create_company') {
+            transporter.sendMail({
+                from: mailer.user,
+                to: receiver,
+                subject: "Company credentials",
+                html:
+                    "website: " + "<a href='" + path.adminPage + "'>'" + path.adminPage + "'</a>" + "<br> <br>" +
+                    "email # " + receiver + '<br> <br>' + "password : " + password,
+                auth: auth,
+            }).then((send) => {
+                resolve(send);
+            }).catch((err) => {
+                reject(err);
+            });
         }
     });
 }

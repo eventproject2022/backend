@@ -13,66 +13,27 @@ exports.createAdmin = (req, res) => {
             if (found == null) {
                 admin.findOne({ contact: fields.contact }).then((found) => {
                     if (found == null) {
-                        admin.findOne({ companyRgNo: fields.companyRgNo }).then((found) => {
-                            if (found == null) {
-                                let password = generatePassword.generate({ length: 8, number: true, uppercase: true });
-                                bcryptjs.hash(password, 10).then((hashed) => {
-                                    if (files.profileImage == undefined) {
-                                        let ins = new admin({
-                                            companyName: fields.companyName,
-                                            companyRgNo: fields.companyRgNo,
-                                            companyType: fields.companyType,
-                                            email: fields.email,
-                                            alternativeEmail: fields.alternativeEmail,
-                                            phone: fields.phone,
-                                            password: hashed,
-                                            address: fields.address,
-                                            city: fields.city,
-                                            state: fields.state,
-                                            country: fields.country,
-                                        })
-                                        ins.save().then((created) => {
-                                            if (created == null) {
-                                                res.status(500).json({ err: true, msg: "An error occurred, Please try again later." });
-                                            } else {
-                                                nodemailer.sendMail(fields.email, 'create_admin', password, created.email).then((sended) => {
-                                                    res.status(200).json({ err: false, msg: "Admin is created successfully." });
-                                                }).catch((err) => {
-                                                    res.status(500).json({ err: true, msg: err });
-                                                });
-                                            }
-                                        }).catch((err) => {
-                                            res.status(500).json({ err: true, msg: err });
-                                        });
+                        let password = generatePassword.generate({ length: 8, number: true, uppercase: true });
+                        bcryptjs.hash(password, 10).then((hashed) => {
+                            if (files.profileImage == undefined) {
+                                let ins = new admin({
+                                    firstName: fields.firstName,
+                                    lastName: fields.lastName,
+                                    email: fields.email,
+                                    alternativeEmail: fields.alternativeEmail,
+                                    phone: fields.phone,
+                                    password: hashed,
+                                    address: fields.address,
+                                    city: fields.city,
+                                    state: fields.state,
+                                    country: fields.country,
+                                })
+                                ins.save().then((created) => {
+                                    if (created == null) {
+                                        res.status(500).json({ err: true, msg: "An error occurred, Please try again later." });
                                     } else {
-                                        cloudinary.upload(files).then((uploaded) => {
-                                            let ins = new admin({
-                                                companyName: fields.companyName,
-                                                companyRgNo: fields.companyRgNo,
-                                                companyType: fields.companyType,
-                                                email: fields.email,
-                                                alternativeEmail: fields.alternativeEmail,
-                                                phone: fields.phone,
-                                                password: hashed,
-                                                address: fields.address,
-                                                city: fields.city,
-                                                state: fields.state,
-                                                country: fields.country,
-                                                profileImage: uploaded,
-                                            })
-                                            ins.save().then((created) => {
-                                                if (created == null) {
-                                                    res.status(500).json({ err: true, msg: "An error occurred, Please try again later." });
-                                                } else {
-                                                    nodemailer.sendMail(fields.email, 'create_admin', password, created.email).then((sended) => {
-                                                        res.status(200).json({ err: false, msg: "Admin is created successfully." });
-                                                    }).catch((err) => {
-                                                        res.status(500).json({ err: true, msg: err });
-                                                    });
-                                                }
-                                            }).catch((err) => {
-                                                res.status(500).json({ err: true, msg: err });
-                                            });
+                                        nodemailer.sendMail(fields.email, 'create_admin', password, created.email).then((ed) => {
+                                            res.status(200).json({ err: false, msg: "Admin is created successfully." });
                                         }).catch((err) => {
                                             res.status(500).json({ err: true, msg: err });
                                         });
@@ -81,19 +42,48 @@ exports.createAdmin = (req, res) => {
                                     res.status(500).json({ err: true, msg: err });
                                 });
                             } else {
-                                res.status(500).json({ err: true, msg: "companyRgNo has already exist." });
+                                cloudinary.upload(files).then((uploaded) => {
+                                    let ins = new admin({
+                                        firstName: fields.firstName,
+                                        lastName: fields.lastName,
+                                        email: fields.email,
+                                        alternativeEmail: fields.alternativeEmail,
+                                        phone: fields.phone,
+                                        password: hashed,
+                                        address: fields.address,
+                                        city: fields.city,
+                                        state: fields.state,
+                                        country: fields.country,
+                                        profileImage: uploaded,
+                                    })
+                                    ins.save().then((created) => {
+                                        if (created == null) {
+                                            res.status(500).json({ err: true, msg: "An error occurred, Please try again later." });
+                                        } else {
+                                            nodemailer.sendMail(fields.email, 'create_admin', password, created.email).then((sended) => {
+                                                res.status(200).json({ err: false, msg: "Admin is created successfully." });
+                                            }).catch((err) => {
+                                                res.status(500).json({ err: true, msg: err });
+                                            });
+                                        }
+                                    }).catch((err) => {
+                                        res.status(500).json({ err: true, msg: err });
+                                    });
+                                }).catch((err) => {
+                                    res.status(500).json({ err: true, msg: err });
+                                });
                             }
                         }).catch((err) => {
-                            res.status(500).json({ err: true, msg: "companyRgNo has already exist." });
+                            res.status(500).json({ err: true, msg: err });
                         });
                     } else {
                         res.status(500).json({ err: true, msg: "Phone number is already exists." });
                     }
                 }).catch((err) => {
-                    res.status(500).json({ err: true, msg: err });
+                    res.status(500).json({ err: true, msg: "Phone number is already exists." });
                 });
             } else {
-                res.status(500).json({ err: true, msg: "Email has already exist." });
+                res.status(500).json({ err: true, msg: "email is already exists." });
             }
         }).catch((err) => {
             res.status(500).json({ err: true, msg: err });
@@ -124,8 +114,8 @@ exports.updateAdmin = (req, res) => {
                 res.status(500).json({ err: true, msg: "Admin is not found." });
             } else {
                 const body = {
-                    companyName: fields.companyName,
-                    companyType: fields.companyType,
+                    firstName: fields.firstName,
+                    lastName: fields.lastName,
                     alternativeEmail: fields.alternativeEmail,
                     phone: fields.phone,
                     address: fields.address,
@@ -156,8 +146,8 @@ exports.updateAdmin = (req, res) => {
                 } else {
                     cloudinary.upload(files).then((uploaded) => {
                         const body = {
-                            companyName: fields.companyName,
-                            companyType: fields.companyType,
+                            firstName: fields.firstName,
+                            lastName: fields.lastName,
                             alternativeEmail: fields.alternativeEmail,
                             phone: fields.phone,
                             address: fields.address,
@@ -194,7 +184,7 @@ exports.updateAdmin = (req, res) => {
     });
 }
 exports.searchAdmin = (req, res) => {
-    admin.find({ companyName: { $regex: req.query.query, $options: 'i' } }).then((results) => {
+    admin.find({ firstName: { $regex: req.query.query, $options: 'i' } }).then((results) => {
         res.status(200).json({ err: false, msg: "Admin found successfully.", data: results });
     }).catch((err) => {
         res.status(500).json({ err: true, msg: err })

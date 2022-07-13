@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
 
 const schema = mongoose.Schema;
-const admin = new schema({
-    firstName: { type: String, required: true },
-    lastName: { type: String },
+const company = new schema({
+    adminId: { type: mongoose.Types.ObjectId, required: true },
+    companyName: { type: String, required: true },
+    companyType: { type: String, required: true },
+    companyRgNo: { type: Number, required: true },
     email: { type: String, required: true, unique: true },
     alternativeEmail: { type: String },
     phone: { type: Number, required: true },
@@ -12,10 +14,10 @@ const admin = new schema({
     city: { type: String, required: true },
     state: { type: String, required: true },
     country: { type: String, required: true },
-    profileImage: { type: String },
-    socketId: { type: String },
-    isActive: { type: Boolean, default: false },
-    streamId: { type: mongoose.Types.ObjectId },
-},
-    { versionKey: false, timestamps: true, });
-module.exports = mongoose.model('admin', admin);
+    companyImage: { type: String },
+}, {
+    versionKey: false,
+    timestamps: true
+});
+
+module.exports = mongoose.model('company', company);

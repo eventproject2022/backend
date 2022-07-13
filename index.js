@@ -16,9 +16,8 @@ mongoose.connect(db.developmentSrv, {
 });
 
 const app = express();
-app.use(cors({
-    origin: '*'
-}));
+app.use(cors());
+
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(express.urlencoded({ extended: true }));
@@ -26,12 +25,14 @@ app.use(express.json());
 
 var server = require("http").createServer(app);
 
-app.get("/", (req, res) => {
-    res.status(200).send(`Backend version 1.0.0 working `);
-});
-
+require('./socket.io')(server);
 require('./_routes/superAdmin.route')(app);
 require('./_routes/admin.route')(app);
+require('./_routes/stream.route')(app);
+require('./_routes/company.route')(app);
+app.get("/", (req, res) => {
+    res.status(200).json(`Backend version 1.0.0 working `);
+});
 server.listen(PORT, () => {
     console.log(`Backend server listening at ${PORT}`);
 });

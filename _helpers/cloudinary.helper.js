@@ -18,6 +18,14 @@ exports.upload = (files) => {
             }).catch((err) => {
                 reject(err);
             });
+        } else if (files.companyImage) {
+            cloudinary.v2.uploader.upload(files.companyImage.filepath, {
+                folder: 'company_photos', width: 200, height: 200,
+            }).then((uploaded) => {
+                resolve(uploaded.url);
+            }).catch((err) => {
+                reject(err);
+            });
         }
     });
 }
