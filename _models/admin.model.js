@@ -13,6 +13,7 @@ const admin = new schema({
     state: { type: String, required: true },
     country: { type: String, required: true },
     profileImage: { type: String },
+    status: { type: String }
 },
     { versionKey: false, timestamps: true, });
 module.exports = mongoose.model('admin', admin);

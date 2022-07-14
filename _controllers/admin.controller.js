@@ -27,6 +27,7 @@ exports.createAdmin = (req, res) => {
                                     city: fields.city,
                                     state: fields.state,
                                     country: fields.country,
+                                    status: fields.status,
                                 })
                                 ins.save().then((created) => {
                                     if (created == null) {
@@ -122,6 +123,7 @@ exports.updateAdmin = (req, res) => {
                     city: fields.city,
                     state: fields.state,
                     country: fields.country,
+                    status: fields.status,
                     profilePhoto: '',
                 }
                 if (files.profilePhoto === undefined) {
@@ -155,6 +157,7 @@ exports.updateAdmin = (req, res) => {
                             state: fields.state,
                             country: fields.country,
                             profilePhoto: uploaded,
+                            status: fields.status,
                         }
                         admin.updateOne({ _id: ObjectID(req.params.adminId) }, { $set: body }).then((updateAdmin) => {
                             if (updateAdmin.modifiedCount == 0) {
