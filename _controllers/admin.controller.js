@@ -11,7 +11,7 @@ exports.createAdmin = (req, res) => {
     form.parse(req, (err, fields, files) => {
         admin.findOne({ email: fields.email }).then((found) => {
             if (found == null) {
-                admin.findOne({ contact: fields.contact }).then((found) => {
+                admin.findOne({ phone: fields.phone }).then((found) => {
                     if (found == null) {
                         let password = generatePassword.generate({ length: 8, number: true, uppercase: true });
                         bcryptjs.hash(password, 10).then((hashed) => {
