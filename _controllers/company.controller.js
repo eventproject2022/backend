@@ -13,7 +13,7 @@ exports.createCompany = (req, res) => {
     form.parse(req, (err, fields, files) => {
         company.findOne({ email: fields.email }).then((found) => {
             if (found == null) {
-                company.findOne({ contact: fields.contact }).then((found) => {
+                company.findOne({ phone: fields.phone }).then((found) => {
                     if (found == null) {
                         company.findOne({ companyRgNo: fields.companyRgNo }).then((found) => {
                             if (found == null) {
