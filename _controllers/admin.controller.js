@@ -93,16 +93,20 @@ exports.createAdmin = (req, res) => {
 }
 exports.adminLogin = (req, res) => {
     admin.findOne({ email: req.body.email }).then((found) => {
-        bcryptjs.compare(req.body.password, found.password).then((compared) => {
-            if (compared == true) {
-                let token = jsonwebtoken.sign({ _id: found._id }, 'privateKey');
-                res.status(200).json({ err: false, msg: "Admin Login successfully.", token: token });
-            } else {
-                res.status(500).json({ err: true, msg: "Password is incorrect." });
-            }
-        }).catch((err) => {
-            res.status(500).json({ err: true, msg: err });
-        });
+        if (found == null) {
+            res.status(500).json({ err: true, msg: "Account does not exist" })
+        } else {
+            bcryptjs.compare(req.body.password, found.password).then((compared) => {
+                if (compared == true) {
+                    let token = jsonwebtoken.sign({ _id: found._id }, 'privateKey');
+                    res.status(200).json({ err: false, msg: "Admin Login successfully.", token: token });
+                } else {
+                    res.status(500).json({ err: true, msg: "Password is incorrect." });
+                }
+            }).catch((err) => {
+                res.status(500).json({ err: true, msg: err });
+            });
+        }
     }).catch((err) => {
         res.status(500).json({ err: true, msg: err });
     });
