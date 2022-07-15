@@ -217,13 +217,9 @@ exports.getAllCompanies = (req, res) => {
         res.status(500).json({ err: true, msg: err })
     });
 }
-exports.getCompanyById = (req, res) => {
-    company.findOne({ _id: ObjectID(req.params.companyId) }).then((companyFound) => {
-        if (companyFound == null) {
-            res.status(500).json({ err: true, msg: "Company Not found." });
-        } else {
-            res.status(200).json({ err: false, msg: "Company found successfully.", Admin: companyFound });
-        }
+exports.getCompanyAdminId = (req, res) => {
+    company.find({ adminId: ObjectID(req.params.adminId) }).then((companyFound) => {
+        res.status(200).json({ err: false, msg: "Company found successfully.", company: companyFound });
     }).catch((err) => {
         res.status(500).json({ err: true, msg: err })
     })

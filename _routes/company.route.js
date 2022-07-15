@@ -13,8 +13,8 @@ module.exports = (app) => {
     app.post('/api/company/createCompany', company.createCompany);
     app.post('/api/company/companyLogin', company.companyLogin);
     app.post('/api/company/updateCompany/:companyId', company.updateCompany);
-    app.post('/api/company/deleteCompanyById/:companyId', company.deleteCompanyById);
+    app.post('/api/company/deleteCompanyById/:adminId', company.deleteCompanyById);
     app.post('/api/company/searchCompanies', company.searchCompanies);
     app.get('/api/company/getAllCompanies', company.getAllCompanies);
-    app.get('/api/company/getCompanyById/:companyId', company.getCompanyById);
+    app.get('/api/company/getCompanyAdminId/:adminId', company.getCompanyAdminId);
 }
