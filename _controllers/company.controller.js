@@ -79,6 +79,7 @@ exports.createCompany = (req, res) => {
                                                 res.status(500).json({ err: true, msg: err });
                                             });
                                         }).catch((err) => {
+                                            console.error(err)
                                             res.status(500).json({ err: true, msg: err });
                                         });
                                     }
@@ -86,15 +87,17 @@ exports.createCompany = (req, res) => {
                                     res.status(500).json({ err: true, msg: err });
                                 });
                             } else {
-                                res.state(500).json({ err: true, msg: 'Registration Number already Exist.' })
+                                res.status(500).json({ err: true, msg: 'Registration Number already Exist.' })
                             }
                         }).catch((err) => {
+                            console.error(err)
                             res.status(500).json({ err: true, msg: err });
                         });
                     } else {
                         res.status(500).json({ err: true, msg: "Phone number is already exists." });
                     }
                 }).catch((err) => {
+                    console.error(err)
                     res.status(500).json({ err: true, msg: err });
                 });
             } else {
