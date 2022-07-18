@@ -16,4 +16,5 @@ module.exports = (app) => {
     app.get('/api/admin/getAllAdmins', admin.getAllAdmins);
     app.get('/api/admin/getAdminById/:_id', admin.getAdminById);
     app.post('/api/admin/deleteAdminById/:adminId', admin.deleteAdminById);
+    app.post('/api/admin/changePassword', admin.changePassword);
 }

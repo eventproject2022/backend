@@ -16,7 +16,7 @@ const company = new schema({
     country: { type: String, required: true },
     companyImage: { type: String },
     socketId: { type: String },
-    isActive: { type: Boolean, default: false },
+    isActive: { type: Boolean, required: true, default: true },
     streamId: { type: mongoose.Types.ObjectId },
 }, {
     versionKey: false,

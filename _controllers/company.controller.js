@@ -6,8 +6,6 @@ const formidable = require('formidable');
 const generatePassword = require('generate-password');
 const cloudinary = require('../_helpers/cloudinary.helper');
 const nodemailer = require('../_helpers/mailer.helper');
-
-
 exports.createCompany = (req, res) => {
     const form = new formidable.IncomingForm({ multiples: true });
     form.parse(req, (err, fields, files) => {
@@ -141,6 +139,7 @@ exports.updateCompany = (req, res) => {
                     state: fields.state,
                     country: fields.country,
                     companyImage: '',
+                    isActive: fields.isActive,
                 }
                 if (files.companyImage === undefined) {
                     delete body.companyImage;
@@ -174,6 +173,7 @@ exports.updateCompany = (req, res) => {
                             state: fields.state,
                             country: fields.country,
                             companyImage: uploaded,
+                            isActive: fields.isActive,
                         }
                         company.updateOne({ _id: ObjectID(req.params.companyId) }, { $set: body }).then((updateCompany) => {
                             console.log(updateCompany)
@@ -232,6 +232,41 @@ exports.deleteCompanyById = (req, res) => {
             res.status(500).json({ err: false, msg: "Company Not Deleted" });
         }
     }).catch((err) => {
+        res.status(500).json({ err: true, msg: err })
+    });
+}
+exports.changePassword = (req, res) => {
+    company.findOne({ _id: ObjectID(req.body.companyId) }).then((companyFound) => {
+        if (companyFound == null) {
+            res.status(500).json({ err: true, msg: "Company not found" });
+        } else {
+            bcryptjs.compare(req.body.oldPassword, companyFound.password).then((compared) => {
+                if (compared == true) {
+                    bcryptjs.hash(req.body.newPassword, 10).then((hashed) => {
+                        company.updateOne({ _id: ObjectID(req.body.companyId) }, { $set: { password: hashed } }).then((updateCompany) => {
+                            if (updateCompany.modifiedCount == 1) {
+                                res.status(200).json({ err: false, msg: "Password changed successfully" })
+                            } else {
+                                res.status(500).json({ err: false, msg: "Password Not changed " })
+                            }
+                        }).catch((err) => {
+                            console.log(err)
+                            res.status(500).json({ err: true, msg: err })
+                        });
+                    }).catch((err) => {
+                        console.log(err)
+                        res.status(500).json({ err: true, msg: err })
+                    });
+                } else {
+                    res.status(500).json({ err: false, msg: "Old Password Not matched " })
+                }
+            }).catch((err) => {
+                console.log(err)
+                res.status(500).json({ err: true, msg: err })
+            });
+        }
+    }).catch((err) => {
+        console.log(err)
         res.status(500).json({ err: true, msg: err })
     });
 }

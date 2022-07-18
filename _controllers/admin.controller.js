@@ -127,7 +127,7 @@ exports.updateAdmin = (req, res) => {
                     city: fields.city,
                     state: fields.state,
                     country: fields.country,
-                    status: fields.status,
+                    isActive: fields.isActive,
                     profilePhoto: '',
                 }
                 if (files.profilePhoto === undefined) {
@@ -161,7 +161,7 @@ exports.updateAdmin = (req, res) => {
                             state: fields.state,
                             country: fields.country,
                             profilePhoto: uploaded,
-                            status: fields.status,
+                            isActive: fields.isActive,
                         }
                         admin.updateOne({ _id: ObjectID(req.params.adminId) }, { $set: body }).then((updateAdmin) => {
                             if (updateAdmin.modifiedCount == 0) {
@@ -221,6 +221,37 @@ exports.deleteAdminById = (req, res) => {
             res.status(200).json({ err: false, msg: "Admin Delete Successfully." });
         } else {
             res.status(500).json({ err: false, msg: "Admin Not Deleted" });
+        }
+    }).catch((err) => {
+        res.status(500).json({ err: true, msg: err })
+    });
+}
+exports.changePassword = (req, res) => {
+    admin.findOne({ _id: ObjectID(req.body.adminId) }).then((adminFound) => {
+        if (adminFound == null) {
+            res.status(500).json({ err: true, msg: "Admin not found" });
+        } else {
+            bcryptjs.compare(req.body.oldPassword, adminFound.password).then((compared) => {
+                if (compared == true) {
+                    bcryptjs.hash(req.body.newPassword, 10).then((hashed) => {
+                        admin.updateOne({ _id: ObjectID(req.body.adminId) }, { $set: { password: hashed } }).then((updateAdmin) => {
+                            if (updateAdmin.modifiedCount == 1) {
+                                res.status(200).json({ err: false, msg: "Password changed successfully" })
+                            } else {
+                                res.status(500).json({ err: false, msg: "Password Not changed " })
+                            }
+                        }).catch((err) => {
+                            res.status(500).json({ err: true, msg: err })
+                        });
+                    }).catch((err) => {
+                        res.status(500).json({ err: true, msg: err })
+                    });
+                } else {
+                    res.status(500).json({ err: false, msg: "Old Password Not matched " })
+                }
+            }).catch((err) => {
+                res.status(500).json({ err: true, msg: err })
+            });
         }
     }).catch((err) => {
         res.status(500).json({ err: true, msg: err })

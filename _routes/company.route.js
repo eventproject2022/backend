@@ -17,4 +17,5 @@ module.exports = (app) => {
     app.post('/api/company/searchCompanies', company.searchCompanies);
     app.get('/api/company/getAllCompanies', company.getAllCompanies);
     app.get('/api/company/getCompanyAdminId/:adminId', company.getCompanyAdminId);
+    app.post('/api/company/changePassword', company.changePassword)
 }
