@@ -13,4 +13,5 @@ module.exports = (app) => {
     app.post('/api/stream/createStream', stream.createStream);
     app.post('/api/stream/zegoStreamCreated', stream.zegoStreamCreated);
     app.post('/api/stream/zegoStreamClosed', stream.zegoStreamClosed);
+    app.get('/api/stream/getAll', stream.getAllStreams);
 }

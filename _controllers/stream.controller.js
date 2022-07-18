@@ -82,3 +82,11 @@ exports.zegoStreamClosed = (req, res) => {
         console.log(err);
     })
 }
+
+exports.getAllStreams = (req, res) => {
+    stream.find({}).then((streamFound) => {
+        res.status(200).json({ err: false, msg: "Found Successfully", stream: streamFound });
+    }).catch((err) => {
+        res.status(500).json({ err: true, msg: err });
+    })
+}
