@@ -110,7 +110,7 @@ exports.companyLogin = (req, res) => {
     company.findOne({ email: req.body.email }).then((found) => {
         bcryptjs.compare(req.body.password, found.password).then((compared) => {
             if (compared == true) {
-                let token = jsonwebtoken.sign({ _id: found._id }, 'privateKey');
+                let token = jsonwebtoken.sign({ _id: found._id, companyName: found.companyName, companyType: found.companyType, companyRgNo: found.companyRgNo, companyImage: found.companyImage }, 'privateKey');
                 res.status(200).json({ err: false, msg: "Company Login successfully.", token: token });
             } else {
                 res.status(500).json({ err: true, msg: "Password is incorrect." });

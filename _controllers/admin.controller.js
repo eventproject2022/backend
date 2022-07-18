@@ -98,7 +98,7 @@ exports.adminLogin = (req, res) => {
         } else {
             bcryptjs.compare(req.body.password, found.password).then((compared) => {
                 if (compared == true) {
-                    let token = jsonwebtoken.sign({ _id: found._id }, 'privateKey');
+                    let token = jsonwebtoken.sign({ _id: found._id, firstName: found.firstName, lastName: found.lastName, profileImage: found.profileImage }, 'privateKey');
                     res.status(200).json({ err: false, msg: "Admin Login successfully.", token: token });
                 } else {
                     res.status(500).json({ err: true, msg: "Password is incorrect." });
