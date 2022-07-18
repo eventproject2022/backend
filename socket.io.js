@@ -42,7 +42,7 @@ module.exports = (myObject) => {
                     if (streamFound.startAt == undefined) {
                         var startTime = moment(moment().utcOffset("+05:30").format());
                         stream.updateOne({ _id: streamObj.streamId }, { startAt: startTime }).then((updated) => {
-                            if (updated.nModified === 1) {
+                            if (updated.modifiedCount === 1) {
                                 socket.emit('start_streaming', { err: false, msg: 'Successfully update stream start time.' });
                             } else {
                                 socket.emit('start_streaming', { err: true, msg: 'An error has occurred while updated Start time.' });

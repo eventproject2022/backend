@@ -59,9 +59,8 @@ exports.createStream = (req, res) => {
 }
 
 exports.zegoStreamCreated = (req, res) => {
-    console.log("created", req.body);
     stream.updateOne({ _id: ObjectID(req.body.streamId) }, { $set: { isActive: true } }).then((updated) => {
-        if (updated.nModified === 1) {
+        if (updated.modifiedCount === 1) {
             res.status(200).send({ err: false, msg: "Successfully updated." });
         } else {
             res.status(500).send({ err: true, msg: "An error has occurred, Please try again later." });
@@ -71,9 +70,8 @@ exports.zegoStreamCreated = (req, res) => {
     })
 }
 exports.zegoStreamClosed = (req, res) => {
-    console.log("closed", req.body);
     stream.updateOne({ _id: ObjectID(req.body.streamId) }, { $set: { isActive: false } }).then((updated) => {
-        if (updated.nModified === 1) {
+        if (updated.modifiedCount === 1) {
             res.status(200).send({ err: false, msg: "Successfully updated." });
         } else {
             res.status(500).send({ err: true, msg: "An error has occurred, Please try again later." });
