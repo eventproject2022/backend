@@ -4,29 +4,32 @@ const jsonwebtoken = require('jsonwebtoken');
 const formidable = require('formidable');
 const cloudinary = require('../_helpers/cloudinary.helper');
 const ObjectID = require('mongodb').ObjectId;
-
+const uniqueId = require('../_helpers/uniqueId.helper');
 exports.userSignUp = (req, res) => {
     user.findOne({ email: req.body.email }).then(userFound => {
         if (userFound == null) {
-            bcryptjs.hash(req.body.password, 10).then((hashed) => {
-                let ins = new user({
-                    name: req.body.name,
-                    email: req.body.email,
-                    password: hashed,
-                    phone: req.body.phone,
-                    address: req.body.address,
-                    state: req.body.state,
-                    country: req.body.country,
+            uniqueId.genrate("user").then((uniqueId) => {
+                bcryptjs.hash(req.body.password, 10).then((hashed) => {
+                    let ins = new user({
+                        name: req.body.name,
+                        email: req.body.email,
+                        password: hashed,
+                        phone: req.body.phone,
+                        address: req.body.address,
+                        state: req.body.state,
+                        country: req.body.country,
+                        uniqueId: uniqueId,
+                    });
+                    ins.save().then((created) => {
+                        if (created) {
+                            res.status(200).json({ err: false, msg: "User Signup successfully." })
+                        } else {
+                            res.status(500).json({ err: true, msg: err })
+                        }
+                    })
+                }).catch((err) => {
+                    res.status(500).json({ err: true, msg: err })
                 });
-                ins.save().then((created) => {
-                    if (created) {
-                        res.status(200).json({ err: false, msg: "User Signup successfully." })
-                    } else {
-                        res.status(500).json({ err: true, msg: err })
-                    }
-                })
-            }).catch((err) => {
-                res.status(500).json({ err: true, msg: err })
             });
         } else {
             res.status(500).json({ err: true, msg: "email is already exists." });
