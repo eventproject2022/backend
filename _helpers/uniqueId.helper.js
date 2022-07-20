@@ -10,6 +10,14 @@ exports.genrate = (type) => {
                     reject(err)
                 })
                 resolve(nextNumber + "")
+            } else if (type === 'company') {
+                let nextNumber = config.companySr
+                appConfig.updateOne({ _id: config._id }, { $inc: { companySr: 1 } }).then((updated) => {
+                    console.log('Successfully Updated.')
+                }).catch((err) => {
+                    reject(err)
+                })
+                resolve(nextNumber + "")
             } else {
                 reject("Invalid type of registration can't process unique id for " + type);
             }

@@ -6,6 +6,7 @@ const formidable = require('formidable');
 const generatePassword = require('generate-password');
 const cloudinary = require('../_helpers/cloudinary.helper');
 const nodemailer = require('../_helpers/mailer.helper');
+const uniqueId = require('../_helpers/uniqueId.helper');
 exports.createCompany = (req, res) => {
     const form = new formidable.IncomingForm({ multiples: true });
     form.parse(req, (err, fields, files) => {
@@ -15,38 +16,10 @@ exports.createCompany = (req, res) => {
                     if (found == null) {
                         company.findOne({ companyRgNo: fields.companyRgNo }).then((found) => {
                             if (found == null) {
-                                let password = generatePassword.generate({ length: 8, number: true, uppercase: true });
-                                bcryptjs.hash(password, 10).then((hashed) => {
-                                    if (files.companyImage == undefined) {
-                                        let ins = new company({
-                                            adminId: ObjectID(fields.adminId),
-                                            companyName: fields.companyName,
-                                            companyType: fields.companyType,
-                                            companyRgNo: fields.companyRgNo,
-                                            email: fields.email,
-                                            alternativeEmail: fields.alternativeEmail,
-                                            phone: fields.phone,
-                                            password: hashed,
-                                            address: fields.address,
-                                            city: fields.city,
-                                            state: fields.state,
-                                            country: fields.country,
-                                        })
-                                        ins.save().then((created) => {
-                                            if (created == null) {
-                                                res.status(500).json({ err: true, msg: "An error occurred, Please try again later." });
-                                            } else {
-                                                nodemailer.sendMail(fields.email, 'create_company', password, created.email).then((ed) => {
-                                                    res.status(200).json({ err: false, msg: "Company is created successfully." });
-                                                }).catch((err) => {
-                                                    res.status(500).json({ err: true, msg: err });
-                                                });
-                                            }
-                                        }).catch((err) => {
-                                            res.status(500).json({ err: true, msg: err });
-                                        });
-                                    } else {
-                                        cloudinary.upload(files).then((uploaded) => {
+                                uniqueId.genrate("company").then((uniqueId) => {
+                                    let password = generatePassword.generate({ length: 8, number: true, uppercase: true });
+                                    bcryptjs.hash(password, 10).then((hashed) => {
+                                        if (files.companyImage == undefined) {
                                             let ins = new company({
                                                 adminId: ObjectID(fields.adminId),
                                                 companyName: fields.companyName,
@@ -60,27 +33,61 @@ exports.createCompany = (req, res) => {
                                                 city: fields.city,
                                                 state: fields.state,
                                                 country: fields.country,
-                                                companyImage: uploaded,
+                                                uniqueId: uniqueId,
                                             })
                                             ins.save().then((created) => {
                                                 if (created == null) {
                                                     res.status(500).json({ err: true, msg: "An error occurred, Please try again later." });
                                                 } else {
-                                                    nodemailer.sendMail(fields.email, 'create_company', password, created.email).then((sended) => {
+                                                    nodemailer.sendMail(fields.email, 'create_company', password, created.email).then((ed) => {
                                                         res.status(200).json({ err: false, msg: "Company is created successfully." });
                                                     }).catch((err) => {
                                                         res.status(500).json({ err: true, msg: err });
                                                     });
                                                 }
                                             }).catch((err) => {
-                                                console.log(err);
                                                 res.status(500).json({ err: true, msg: err });
                                             });
-                                        }).catch((err) => {
-                                            console.error(err)
-                                            res.status(500).json({ err: true, msg: err });
-                                        });
-                                    }
+                                        } else {
+                                            cloudinary.upload(files).then((uploaded) => {
+                                                let ins = new company({
+                                                    adminId: ObjectID(fields.adminId),
+                                                    companyName: fields.companyName,
+                                                    companyType: fields.companyType,
+                                                    companyRgNo: fields.companyRgNo,
+                                                    email: fields.email,
+                                                    alternativeEmail: fields.alternativeEmail,
+                                                    phone: fields.phone,
+                                                    password: hashed,
+                                                    address: fields.address,
+                                                    city: fields.city,
+                                                    state: fields.state,
+                                                    country: fields.country,
+                                                    companyImage: uploaded,
+                                                    uniqueId: uniqueId,
+                                                })
+                                                ins.save().then((created) => {
+                                                    if (created == null) {
+                                                        res.status(500).json({ err: true, msg: "An error occurred, Please try again later." });
+                                                    } else {
+                                                        nodemailer.sendMail(fields.email, 'create_company', password, created.email).then((sended) => {
+                                                            res.status(200).json({ err: false, msg: "Company is created successfully." });
+                                                        }).catch((err) => {
+                                                            res.status(500).json({ err: true, msg: err });
+                                                        });
+                                                    }
+                                                }).catch((err) => {
+                                                    console.log(err);
+                                                    res.status(500).json({ err: true, msg: err });
+                                                });
+                                            }).catch((err) => {
+                                                console.error(err)
+                                                res.status(500).json({ err: true, msg: err });
+                                            });
+                                        }
+                                    }).catch((err) => {
+                                        res.status(500).json({ err: true, msg: err });
+                                    });
                                 }).catch((err) => {
                                     res.status(500).json({ err: true, msg: err });
                                 });

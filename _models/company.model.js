@@ -18,6 +18,7 @@ const company = new schema({
     socketId: { type: String },
     isActive: { type: Boolean, required: true, default: true },
     streamId: { type: mongoose.Types.ObjectId },
+    uniqueId: { type: Number, required: true },
 }, {
     versionKey: false,
     timestamps: true
