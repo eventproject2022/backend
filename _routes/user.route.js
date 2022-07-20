@@ -13,4 +13,5 @@ module.exports = (app) => {
     app.post('/api/user/userSignUp', user.userSignUp);
     app.post('/api/user/userLogin', user.userLogin);
     app.get('/api/user/getAllUsers', user.getAllUsers);
+    app.post('/api/user/update/:userId', user.update);
 }

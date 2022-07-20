@@ -9,6 +9,7 @@ const user = new schema({
     address: { type: String },
     state: { type: String },
     country: { type: String },
+    profileImage: { type: String }
 },
     { versionKey: false, timestamps: true, });
 module.exports = mongoose.model('user', user);
