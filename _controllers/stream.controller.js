@@ -31,6 +31,7 @@ exports.createStream = (req, res) => {
                         companyId: req.body.companyId,
                         isActive: req.body.isActive,
                         streamType: req.body.streamType,
+                        roomId: req.body.roomId,
                     });
                     ins.save().then((created) => {
                         if (created == null) {
