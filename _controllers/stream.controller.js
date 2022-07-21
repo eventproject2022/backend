@@ -2,6 +2,7 @@ const stream = require('../_models/stream.model');
 const admin = require('../_models/admin.model');
 const ObjectID = require('mongodb').ObjectId;
 const company = require('../_models/company.model');
+const generateZegoToken = require('../_helpers/generateZegoToken.helper');
 exports.createStream = (req, res) => {
     stream.findOne({ companyId: ObjectID(req.body.companyId) }).then((streamFound) => {
         if (streamFound == null) {
@@ -87,4 +88,8 @@ exports.getAllStreams = (req, res) => {
     }).catch((err) => {
         res.status(500).json({ err: true, msg: err });
     })
+}
+exports.generateZegoToken = (req, res) => {
+    const token = generateZegoToken.generateToken04(req.body.appId, req.body.userId, req.body.secret, req.body.effectiveTimeInSeconds, req.body.payload);
+    res.status(200).json({ err: false, msg: " token created successfully", token: token })
 }
