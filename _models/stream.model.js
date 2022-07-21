@@ -9,6 +9,7 @@ const stream = new schema({
     startAt: { type: Date },
     endAt: { type: Date },
     isActive: { type: Boolean, default: false },
+    roomId: { type: String },
 }, {
     versionKey: false,
     timestamps: true
