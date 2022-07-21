@@ -38,7 +38,7 @@ exports.createStream = (req, res) => {
                         } else {
                             company.updateOne({ _id: ObjectID(req.body.companyId) }, { $set: { streamId: created._id } }).then((updated) => {
                                 if (updated.modifiedCount === 1) {
-                                    res.status(200).json({ err: false, msg: "Successfully created.", streamId: created._id });
+                                    res.status(200).json({ err: false, msg: "Successfully created.", stream: created });
                                 } else {
                                     res.status(500).json({ err: true, msg: "An error occurred, Please try again later." });
                                 }
