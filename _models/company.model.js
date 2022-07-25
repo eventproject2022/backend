@@ -19,6 +19,7 @@ const company = new schema({
     isActive: { type: Boolean, required: true, default: true },
     streamId: { type: mongoose.Types.ObjectId },
     uniqueId: { type: Number, required: true },
+    about: { type: String }
 }, {
     versionKey: false,
     timestamps: true

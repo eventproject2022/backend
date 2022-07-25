@@ -34,6 +34,7 @@ exports.createCompany = (req, res) => {
                                                 state: fields.state,
                                                 country: fields.country,
                                                 uniqueId: uniqueId,
+                                                about: fields.about,
                                             })
                                             ins.save().then((created) => {
                                                 if (created == null) {
@@ -65,6 +66,7 @@ exports.createCompany = (req, res) => {
                                                     country: fields.country,
                                                     companyImage: uploaded,
                                                     uniqueId: uniqueId,
+                                                    about: fields.about,
                                                 })
                                                 ins.save().then((created) => {
                                                     if (created == null) {
@@ -280,4 +282,15 @@ exports.changePassword = (req, res) => {
         console.log(err)
         res.status(500).json({ err: true, msg: err })
     });
+}
+exports.getById = (req, res) => {
+    company.findOne({ _id: ObjectID(req.params.companyId) }).then((companyFound) => {
+        if (companyFound !== null) {
+            res.status(200).json({ err: false, msg: " company found successfully", company: companyFound })
+        } else {
+            res.status(500).json({ err: false, msg: " company not found" })
+        }
+    }).catch((err) => {
+        res.status(500).json({ err: true, msg: err })
+    })
 }
